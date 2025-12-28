@@ -3,7 +3,7 @@ import SoundButton from './components/SoundButton';
 import TapeSequencer from './components/TapeSequencer';
 import PresetGallery from './components/PresetGallery';
 import Controls from './components/Controls';
-import { soundLibrary, generateSound } from './utils/audioGenerator';
+import { soundLibrary, generateSound, loadAudioFile } from './utils/audioGenerator';
 import { loadMixFromUrl } from './utils/shareUtils';
 
 function App() {
@@ -13,27 +13,46 @@ function App() {
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [layerMode, setLayerMode] = useState(false);
   const [shake, setShake] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const audioContextRef = useRef(null);
   const soundBuffersRef = useRef({});
 
   // Initialize Web Audio API
   useEffect(() => {
-    audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    const initAudio = async () => {
+      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
 
-    // Generate all sound buffers
-    soundLibrary.forEach((sound) => {
-      soundBuffersRef.current[sound.id] = generateSound(sound.type, audioContextRef.current);
-    });
+      // Load sound buffers (audio files or synthesized)
+      await Promise.all(
+        soundLibrary.map(async (sound) => {
+          // Try to load audio file if specified
+          if (sound.audioFile) {
+            const buffer = await loadAudioFile(sound.audioFile, audioContextRef.current);
+            if (buffer) {
+              soundBuffersRef.current[sound.id] = buffer;
+              return;
+            }
+            console.log(`Audio file not found for ${sound.id}, using synthesized sound`);
+          }
+          // Fallback to synthesized sound
+          soundBuffersRef.current[sound.id] = generateSound(sound.type, audioContextRef.current);
+        })
+      );
 
-    // Load mix from URL if present
-    const loadedMix = loadMixFromUrl();
-    if (loadedMix) {
-      setMixName(loadedMix.name || '');
-      setSequence(loadedMix.sequence || []);
-      setPlaybackSpeed(loadedMix.speed || 1);
-      setLayerMode(loadedMix.layerMode || false);
-    }
+      setIsLoading(false);
+
+      // Load mix from URL if present
+      const loadedMix = loadMixFromUrl();
+      if (loadedMix) {
+        setMixName(loadedMix.name || '');
+        setSequence(loadedMix.sequence || []);
+        setPlaybackSpeed(loadedMix.speed || 1);
+        setLayerMode(loadedMix.layerMode || false);
+      }
+    };
+
+    initAudio();
 
     return () => {
       if (audioContextRef.current) {
@@ -150,6 +169,18 @@ function App() {
     setMixName(preset.name);
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4 animate-bounce">🎵</div>
+          <h2 className="text-3xl font-cursed text-white glitch">LOADING SOUNDS...</h2>
+          <p className="text-neon-pink mt-2">Preparing your brainrot experience</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`min-h-screen p-4 md:p-8 ${shake ? 'animate-shake' : ''}`}
@@ -190,7 +221,7 @@ function App() {
                 ))}
               </div>
               <p className="text-center text-pastel-blue text-sm mt-4">
-                👆 Click to play • Drag to sequence 👆
+                👆 Click to play • Press + to add to tape • Drag on desktop 👆
               </p>
             </div>
 

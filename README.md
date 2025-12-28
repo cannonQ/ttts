@@ -80,13 +80,52 @@ The built files will be in the `dist` directory.
 - **Web Audio API**: Synthesized audio generation and playback
 - **No backend required**: Uses browser storage and URL encoding
 
-## 🔊 Audio Generation
+## 🔊 Audio System
 
-All sounds are procedurally generated using the Web Audio API - no audio files needed! Each sound is synthesized in real-time using oscillators, noise generators, and envelope shaping.
+### Default: Synthesized Sounds
+By default, all sounds are procedurally generated using the Web Audio API - no audio files needed! Each sound is synthesized in real-time using oscillators, noise generators, and envelope shaping.
+
+### Using Real Audio Files
+Want to use actual audio clips instead? Easy!
+
+1. **Add your audio files** to the `public/sounds/` directory:
+   ```
+   public/sounds/
+   ├── tung.mp3
+   ├── tata.mp3
+   ├── brr.mp3
+   ├── bombardiro.mp3
+   ├── tralalero.mp3
+   ├── scream.mp3
+   ├── alarm.mp3
+   └── chaos.mp3
+   ```
+
+2. **Update the sound library** in `src/utils/audioGenerator.js`:
+   ```javascript
+   export const soundLibrary = [
+     { id: 'tung', name: 'TUNG TUNG', type: 'tung', emoji: '🥁',
+       description: 'Tung Sahur', color: 'bg-neon-pink',
+       audioFile: '/sounds/tung.mp3' }, // Uncomment and add path
+     // ... update other sounds similarly
+   ];
+   ```
+
+3. **Restart your dev server** - The app will load your audio files!
+
+**Supported formats**: `.mp3`, `.wav`, `.ogg`, `.m4a`
+
+**Fallback**: If an audio file isn't found, the app automatically uses the synthesized version.
+
+See `public/sounds/README.md` for detailed instructions.
 
 ## 📱 Mobile Support
 
-Fully responsive design optimized for mobile browsers. Touch interactions, drag-and-drop, and audio playback all work smoothly on phones and tablets.
+Fully responsive design optimized for mobile browsers:
+- **Touch-friendly**: Large buttons with tap-to-add functionality
+- **+ Button**: Always visible on mobile to add sounds to tape (no drag needed!)
+- **Drag & Drop**: Works on desktop browsers
+- **Audio playback**: Reliable playback on iOS and Android
 
 ## 🎭 The Vibe
 

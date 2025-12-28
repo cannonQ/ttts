@@ -9,6 +9,11 @@ const SoundButton = ({ sound, onPlay, onAddToSequence }) => {
     setTimeout(() => setIsPlaying(false), 300);
   };
 
+  const handleAddClick = (e) => {
+    e.stopPropagation(); // Prevent playing sound when adding
+    onAddToSequence(sound.id);
+  };
+
   const handleDragStart = (e) => {
     e.dataTransfer.setData('soundId', sound.id);
   };
@@ -32,6 +37,15 @@ const SoundButton = ({ sound, onPlay, onAddToSequence }) => {
     >
       {/* Glitch effect on hover */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 transition-opacity"></div>
+
+      {/* Add to Tape button - visible on mobile, hidden on desktop (where drag works) */}
+      <button
+        onClick={handleAddClick}
+        className="absolute top-2 right-2 bg-neon-green hover:bg-green-400 text-black font-bold w-8 h-8 rounded-full border-2 border-black shadow-lg z-10 flex items-center justify-center text-lg md:opacity-0 md:group-hover:opacity-100 transition-opacity"
+        title="Add to tape"
+      >
+        +
+      </button>
 
       <div className="text-4xl md:text-5xl mb-2 animate-bounce">{sound.emoji}</div>
       <div className="text-sm md:text-lg font-bold text-black text-center font-pixel leading-tight">
