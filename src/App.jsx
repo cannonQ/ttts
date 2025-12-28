@@ -268,7 +268,8 @@ function App() {
                 <h3 className="text-neon-yellow font-bold mb-2">ℹ️ HOW TO USE</h3>
                 <ul className="text-white text-sm space-y-2">
                   <li>🎵 Click buttons to hear sounds</li>
-                  <li>🎬 Drag sounds to tape recorder</li>
+                  <li>➕ Press + to add to tape</li>
+                  <li>↕️ Use ↑↓ to reorder sounds</li>
                   <li>▶️ Play your cursed creation</li>
                   <li>💾 Save & share with friends</li>
                   <li>🎭 Try suggested mixes below!</li>
