@@ -1,4 +1,4 @@
-# 🎵 Brainrot Soundboard - TUNG TUNG TUNG SAHUR
+# [🎵 Brainrot Soundboard - TUNG TUNG TUNG SAHUR](https://ttts-alpha.vercel.app/)
 
 A chaotic, post-ironic web-based soundboard and meme mix tape maker featuring Italian Brainrot characters! Create cursed audio mashups, layer sounds, and share your unhinged creations with friends.
 
