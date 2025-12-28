@@ -62,10 +62,10 @@ const TapeSequencer = ({ sequence, onRemove, onClear, onReorder, onPlay, isPlayi
       {sequence.length === 0 ? (
         <div className="border-4 border-dashed border-neon-blue rounded-lg p-8 text-center">
           <p className="text-neon-blue text-lg md:text-xl font-bold">
-            👆 DRAG SOUNDS HERE or CLICK TO ADD 👆
+            👆 PRESS + ON SOUNDS TO ADD 👆
           </p>
           <p className="text-pastel-blue text-sm mt-2">
-            Drop sounds to create your cursed mix
+            Tap the green + button on each sound to add it to your mix
           </p>
         </div>
       ) : (
@@ -92,17 +92,53 @@ const TapeSequencer = ({ sequence, onRemove, onClear, onReorder, onPlay, isPlayi
                 <div className="flex items-center gap-3">
                   <span className="text-2xl font-bold text-black">#{index + 1}</span>
                   <span className="text-2xl">{sound.emoji}</span>
-                  <span className="font-bold text-black">{sound.name}</span>
-                  <span className="text-xs text-black opacity-75">
+                  <span className="font-bold text-black hidden sm:inline">{sound.name}</span>
+                  <span className="text-xs text-black opacity-75 hidden md:inline">
                     +{item.delay}ms
                   </span>
                 </div>
-                <button
-                  onClick={() => onRemove(index)}
-                  className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded font-bold"
-                >
-                  ✕
-                </button>
+                <div className="flex items-center gap-2">
+                  {/* Up/Down buttons for reordering */}
+                  <button
+                    onClick={() => onReorder(index, index - 1)}
+                    disabled={index === 0}
+                    className={`
+                      w-8 h-8 rounded font-bold text-lg
+                      ${index === 0
+                        ? 'bg-gray-400 cursor-not-allowed opacity-50'
+                        : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
+                      }
+                      text-white border-2 border-black
+                      flex items-center justify-center
+                    `}
+                    title="Move up"
+                  >
+                    ↑
+                  </button>
+                  <button
+                    onClick={() => onReorder(index, index + 1)}
+                    disabled={index === sequence.length - 1}
+                    className={`
+                      w-8 h-8 rounded font-bold text-lg
+                      ${index === sequence.length - 1
+                        ? 'bg-gray-400 cursor-not-allowed opacity-50'
+                        : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
+                      }
+                      text-white border-2 border-black
+                      flex items-center justify-center
+                    `}
+                    title="Move down"
+                  >
+                    ↓
+                  </button>
+                  <button
+                    onClick={() => onRemove(index)}
+                    className="bg-red-600 hover:bg-red-700 text-white w-8 h-8 rounded font-bold border-2 border-black flex items-center justify-center"
+                    title="Remove"
+                  >
+                    ✕
+                  </button>
+                </div>
               </div>
             );
           })}
