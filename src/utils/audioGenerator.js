@@ -1,4 +1,17 @@
-// Generate synthesized brainrot sounds using Web Audio API
+// Load audio file from URL
+export const loadAudioFile = async (url, audioContext) => {
+  try {
+    const response = await fetch(url);
+    const arrayBuffer = await response.arrayBuffer();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    return audioBuffer;
+  } catch (error) {
+    console.error(`Failed to load audio file: ${url}`, error);
+    return null;
+  }
+};
+
+// Generate synthesized brainrot sounds using Web Audio API (fallback)
 export const generateSound = (type, audioContext) => {
   const duration = type === 'scream' ? 2.0 : 0.8;
   const sampleRate = audioContext.sampleRate;
@@ -86,15 +99,19 @@ export const generateSound = (type, audioContext) => {
 };
 
 // Sound library with metadata
+// To use real audio files:
+// 1. Add your audio files to public/sounds/ directory (e.g., public/sounds/tung.mp3)
+// 2. Uncomment and update the audioFile property below with the path
+// 3. Supported formats: .mp3, .wav, .ogg, .m4a
 export const soundLibrary = [
-  { id: 'tung', name: 'TUNG TUNG', type: 'tung', emoji: '🥁', description: 'Tung Sahur', color: 'bg-neon-pink' },
-  { id: 'tata', name: 'TA TA TA', type: 'tata', emoji: '🔔', description: 'Ta Ta Sahur', color: 'bg-neon-blue' },
-  { id: 'brr', name: 'BRR BRR', type: 'brr', emoji: '👻', description: 'Patapim', color: 'bg-neon-green' },
-  { id: 'bombardiro', name: 'BOMBARDIRO', type: 'bombardiro', emoji: '🐊', description: 'Crocodilo', color: 'bg-neon-yellow' },
-  { id: 'tralalero', name: 'TRALALERO', type: 'tralalero', emoji: '🎵', description: 'Tralala', color: 'bg-pastel-pink' },
-  { id: 'scream', name: 'SCREAM', type: 'scream', emoji: '😱', description: 'DJ Rest DWI', color: 'bg-pastel-purple' },
-  { id: 'alarm', name: 'BEEP BOOP', type: 'alarm', emoji: '⏰', description: 'Alarm', color: 'bg-pastel-blue' },
-  { id: 'chaos', name: 'CHAOS', type: 'chaos', emoji: '🤪', description: 'Crowd Chaos', color: 'bg-red-400' },
+  { id: 'tung', name: 'TUNG TUNG', type: 'tung', emoji: '🥁', description: 'Tung Sahur', color: 'bg-neon-pink', audioFile: null }, // audioFile: '/sounds/tung.mp3'
+  { id: 'tata', name: 'TA TA TA', type: 'tata', emoji: '🔔', description: 'Ta Ta Sahur', color: 'bg-neon-blue', audioFile: null }, // audioFile: '/sounds/tata.mp3'
+  { id: 'brr', name: 'BRR BRR', type: 'brr', emoji: '👻', description: 'Patapim', color: 'bg-neon-green', audioFile: null }, // audioFile: '/sounds/brr.mp3'
+  { id: 'bombardiro', name: 'BOMBARDIRO', type: 'bombardiro', emoji: '🐊', description: 'Crocodilo', color: 'bg-neon-yellow', audioFile: null }, // audioFile: '/sounds/bombardiro.mp3'
+  { id: 'tralalero', name: 'TRALALERO', type: 'tralalero', emoji: '🎵', description: 'Tralala', color: 'bg-pastel-pink', audioFile: null }, // audioFile: '/sounds/tralalero.mp3'
+  { id: 'scream', name: 'SCREAM', type: 'scream', emoji: '😱', description: 'DJ Rest DWI', color: 'bg-pastel-purple', audioFile: null }, // audioFile: '/sounds/scream.mp3'
+  { id: 'alarm', name: 'BEEP BOOP', type: 'alarm', emoji: '⏰', description: 'Alarm', color: 'bg-pastel-blue', audioFile: null }, // audioFile: '/sounds/alarm.mp3'
+  { id: 'chaos', name: 'CHAOS', type: 'chaos', emoji: '🤪', description: 'Crowd Chaos', color: 'bg-red-400', audioFile: null }, // audioFile: '/sounds/chaos.mp3'
 ];
 
 // Preset mixes
