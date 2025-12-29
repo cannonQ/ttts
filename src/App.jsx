@@ -61,6 +61,13 @@ function App() {
     };
   }, []);
 
+  // Get duration of a sound in milliseconds
+  const getSoundDuration = (soundId) => {
+    const buffer = soundBuffersRef.current[soundId];
+    if (!buffer) return 1000; // Default fallback
+    return (buffer.duration / playbackSpeed) * 1000; // Convert to ms and account for speed
+  };
+
   // Play a single sound
   const playSound = (soundId, delay = 0, volume = 1.0, speed = playbackSpeed) => {
     const audioContext = audioContextRef.current;
@@ -92,9 +99,18 @@ function App() {
 
   // Add sound to sequence
   const handleAddToSequence = (soundId) => {
-    const baseDelay = sequence.length > 0
-      ? Math.max(...sequence.map(s => s.delay)) + (layerMode ? 300 : 800)
-      : 0;
+    let baseDelay = 0;
+
+    if (sequence.length > 0) {
+      // Calculate total duration of all previous sounds
+      const totalDuration = sequence.reduce((total, item, index) => {
+        const duration = getSoundDuration(item.soundId);
+        const gap = layerMode ? 300 : 200; // Small gap between sounds
+        return index === 0 ? duration : total + duration + gap;
+      }, 0);
+
+      baseDelay = totalDuration + (layerMode ? 300 : 200); // Add gap before this sound
+    }
 
     setSequence([
       ...sequence,
@@ -129,9 +145,10 @@ function App() {
       playSound(item.soundId, item.delay, item.volume, playbackSpeed);
     });
 
-    // Calculate total duration
-    const maxDelay = Math.max(...sequence.map(s => s.delay));
-    const duration = maxDelay + 2000; // Add buffer for longest sound
+    // Calculate total duration (last sound's delay + its duration + small buffer)
+    const lastSound = sequence[sequence.length - 1];
+    const lastSoundDuration = getSoundDuration(lastSound.soundId);
+    const duration = lastSound.delay + lastSoundDuration + 500; // 500ms buffer
 
     setTimeout(() => {
       setIsPlaying(false);
@@ -154,11 +171,22 @@ function App() {
     const [movedItem] = newSequence.splice(fromIndex, 1);
     newSequence.splice(toIndex, 0, movedItem);
 
-    // Recalculate delays
-    const updatedSequence = newSequence.map((item, index) => ({
-      ...item,
-      delay: index * (layerMode ? 300 : 800),
-    }));
+    // Recalculate delays based on actual audio durations
+    const updatedSequence = newSequence.map((item, index) => {
+      if (index === 0) {
+        return { ...item, delay: 0 };
+      }
+
+      // Calculate cumulative delay based on all previous sounds
+      let cumulativeDelay = 0;
+      for (let i = 0; i < index; i++) {
+        const duration = getSoundDuration(newSequence[i].soundId);
+        const gap = layerMode ? 300 : 200;
+        cumulativeDelay += duration + gap;
+      }
+
+      return { ...item, delay: cumulativeDelay };
+    });
 
     setSequence(updatedSequence);
   };
