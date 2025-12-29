@@ -193,7 +193,24 @@ function App() {
 
   // Load preset
   const handleLoadPreset = (preset) => {
-    setSequence(preset.sequence);
+    // Recalculate delays based on actual audio durations
+    const recalculatedSequence = preset.sequence.map((item, index) => {
+      if (index === 0) {
+        return { ...item, delay: 0 };
+      }
+
+      // Calculate cumulative delay based on all previous sounds
+      let cumulativeDelay = 0;
+      for (let i = 0; i < index; i++) {
+        const duration = getSoundDuration(preset.sequence[i].soundId);
+        const gap = layerMode ? 300 : 200;
+        cumulativeDelay += duration + gap;
+      }
+
+      return { ...item, delay: cumulativeDelay };
+    });
+
+    setSequence(recalculatedSequence);
     setMixName(preset.name);
   };
 
