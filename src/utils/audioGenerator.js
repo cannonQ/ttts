@@ -109,9 +109,9 @@ export const soundLibrary = [
   { id: 'brr', name: 'BRR BRR', type: 'brr', emoji: '👻', description: 'Patapim', color: 'bg-neon-green', audioFile: null }, // audioFile: '/sounds/brr.mp3'
   { id: 'bombardiro', name: 'BOMBARDIRO', type: 'bombardiro', emoji: '🐊', description: 'Crocodilo', color: 'bg-neon-yellow', audioFile: null }, // audioFile: '/sounds/bombardiro.mp3'
   { id: 'tralalero', name: 'TRALALERO', type: 'tralalero', emoji: '🎵', description: 'Tralala', color: 'bg-pastel-pink', audioFile: null }, // audioFile: '/sounds/tralalero.mp3'
-  { id: 'scream', name: 'SCREAM', type: 'scream', emoji: '😱', description: 'DJ Rest DWI', color: 'bg-pastel-purple', audioFile: null }, // audioFile: '/sounds/scream.mp3'
-  { id: 'alarm', name: 'BEEP BOOP', type: 'alarm', emoji: '⏰', description: 'Alarm', color: 'bg-pastel-blue', audioFile: null }, // audioFile: '/sounds/alarm.mp3'
-  { id: 'chaos', name: 'CHAOS', type: 'chaos', emoji: '🤪', description: 'Crowd Chaos', color: 'bg-red-400', audioFile: null }, // audioFile: '/sounds/chaos.mp3'
+  { id: '67kid', name: '67', type: '67kid', emoji: '😱', description: '67kid', color: 'bg-pastel-purple', audioFile: null }, // audioFile: '/sounds/67kid.mp3'
+  { id: 'scp', name: 'WISH I KNEW', type: 'wish i knew', emoji: '⏰', description: 'scp', color: 'bg-pastel-blue', audioFile: null }, // audioFile: '/sounds/scp.mp3'
+  { id: 'barbershop', name: 'BARBERSHOP', type: 'chaos', emoji: '🤪', description: 'haicut for quarter', color: 'bg-red-400', audioFile: null }, // audioFile: '/sounds/barbershop.mp3'
 ];
 
 // Preset mixes
@@ -125,7 +125,7 @@ export const presetMixes = [
       { soundId: 'tung', delay: 500, volume: 1.0 },
       { soundId: 'tung', delay: 700, volume: 1.0 },
       { soundId: 'tata', delay: 1000, volume: 0.9 },
-      { soundId: 'scream', delay: 1200, volume: 0.7 },
+      { soundId: '67', delay: 1200, volume: 0.7 },
     ],
   },
   {
@@ -136,7 +136,7 @@ export const presetMixes = [
       { soundId: 'bombardiro', delay: 0, volume: 1.0 },
       { soundId: 'brr', delay: 300, volume: 0.8 },
       { soundId: 'bombardiro', delay: 600, volume: 1.0 },
-      { soundId: 'chaos', delay: 900, volume: 0.6 },
+      { soundId: 'scp', delay: 900, volume: 0.6 },
       { soundId: 'tralalero', delay: 1200, volume: 0.9 },
     ],
   },
